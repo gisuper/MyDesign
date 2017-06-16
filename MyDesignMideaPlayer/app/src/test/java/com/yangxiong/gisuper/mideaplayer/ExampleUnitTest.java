@@ -1,4 +1,4 @@
-package com.yangxiong.gisuper.mydesignmideaplayer;
+package com.yangxiong.gisuper.mideaplayer;
 
 import org.junit.Test;
 
