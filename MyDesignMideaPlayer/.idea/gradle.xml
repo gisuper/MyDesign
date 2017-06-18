@@ -9,6 +9,10 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/circleindicatorlib" />
+            <option value="$PROJECT_DIR$/circualreveal" />
+            <option value="$PROJECT_DIR$/paraviewpagerlibrary" />
+            <option value="$PROJECT_DIR$/slidemenulibrary" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

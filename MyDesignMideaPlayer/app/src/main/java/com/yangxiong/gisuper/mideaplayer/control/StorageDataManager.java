@@ -1,4 +1,4 @@
-package com.yangxiong.gisuper.mideaplayer.present;
+package com.yangxiong.gisuper.mideaplayer.control;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -37,8 +37,10 @@ public class StorageDataManager {
     }
 
 
-    /**获取所有的图片
-     * @return
+    /**
+     * 获取所有的图片
+     *
+     * @return SparseArray<ImageBean>
      */
     public SparseArray<ImageBean> getImageList() {
         SparseArray<ImageBean> list = new SparseArray<>( );
@@ -58,7 +60,6 @@ public class StorageDataManager {
             String name = cursor.getString(1);
             String path = cursor.getString(2);
 
-            LogUtil.d(TAG, "id: " + id + "name: " + name + "path: " + path);
             ImageBean imageBean = new ImageBean( );
             imageBean.autoId = i++;
             imageBean.id = id;
@@ -67,6 +68,7 @@ public class StorageDataManager {
             list.put(imageBean.autoId, imageBean);
 
         }
+        LogUtil.d(TAG, "listSize: " + list.size( ));
         return list;
     }
 }

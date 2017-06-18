@@ -4,6 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyDesignMideaPlayer.iml" filepath="$PROJECT_DIR$/MyDesignMideaPlayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/circleindicatorlib/circleindicatorlib.iml" filepath="$PROJECT_DIR$/circleindicatorlib/circleindicatorlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/circualreveal/circualreveal.iml" filepath="$PROJECT_DIR$/circualreveal/circualreveal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/paraviewpagerlibrary/paraviewpagerlibrary.iml" filepath="$PROJECT_DIR$/paraviewpagerlibrary/paraviewpagerlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slidemenulibrary/slidemenulibrary.iml" filepath="$PROJECT_DIR$/slidemenulibrary/slidemenulibrary.iml" />
     </modules>
   </component>
 </project>
