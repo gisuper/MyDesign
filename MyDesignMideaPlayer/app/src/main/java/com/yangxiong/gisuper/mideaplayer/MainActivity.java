@@ -1,12 +1,10 @@
 package com.yangxiong.gisuper.mideaplayer;
 
-import android.Manifest;
 import android.animation.Animator;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
@@ -23,10 +21,14 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.yangxiong.gisuper.mideaplayer.control.StorageDataManager;
-import com.yangxiong.gisuper.mideaplayer.global.BaseActivity;
+import com.yangxiong.gisuper.mideaplayer.audio.AudioFragment;
+import com.yangxiong.gisuper.mideaplayer.base.BaseActivity;
+import com.yangxiong.gisuper.mideaplayer.global.GlobalConfig;
 import com.yangxiong.gisuper.mideaplayer.global.LogUtil;
 import com.yangxiong.gisuper.mideaplayer.model.ImageBean;
+import com.yangxiong.gisuper.mideaplayer.model.StorageDataManager;
+import com.yangxiong.gisuper.mideaplayer.photo.PhotoFragment;
+import com.yangxiong.gisuper.mideaplayer.video.VideoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,15 +66,16 @@ public class MainActivity extends BaseActivity implements ViewAnimator.ViewAnima
     }
 
     public SparseArray<ImageBean> getmImageList() {
-       // if (mImageList != null)
-            return mImageList;
-       // else {
-         //   throw new RuntimeException("!!!!!!RuntimeException");
+        // if (mImageList != null)
+        return mImageList;
+        // else {
+        //   throw new RuntimeException("!!!!!!RuntimeException");
         //}
     }
 
     private void initData() {
-        requestReadExternalPermission( );
+        mDataManager = StorageDataManager.getInstance(this);
+        mImageList = mDataManager.getImageList( );
 
         contentFragment = ContentFragment.newInstance(R.drawable.content_music);
         getSupportFragmentManager( ).beginTransaction( )
@@ -95,21 +98,21 @@ public class MainActivity extends BaseActivity implements ViewAnimator.ViewAnima
     }
 
     private void createMenuList() {
-        SlideMenuItem menuItem0 = new SlideMenuItem(ContentFragment.CLOSE, R.drawable.icn_close);
+        SlideMenuItem menuItem0 = new SlideMenuItem(GlobalConfig.CLOSE, R.drawable.icn_close);
         list.add(menuItem0);
-        SlideMenuItem menuItem = new SlideMenuItem(ContentFragment.BUILDING, R.drawable.icn_1);
+        SlideMenuItem menuItem = new SlideMenuItem(GlobalConfig.PHOTO, R.drawable.icn_1);
         list.add(menuItem);
-        SlideMenuItem menuItem2 = new SlideMenuItem(ContentFragment.BOOK, R.drawable.icn_2);
+        SlideMenuItem menuItem2 = new SlideMenuItem(GlobalConfig.AUDIO, R.drawable.icn_2);
         list.add(menuItem2);
-        SlideMenuItem menuItem3 = new SlideMenuItem(ContentFragment.PAINT, R.drawable.icn_3);
+        SlideMenuItem menuItem3 = new SlideMenuItem(GlobalConfig.VIDEO, R.drawable.icn_3);
         list.add(menuItem3);
-        SlideMenuItem menuItem4 = new SlideMenuItem(ContentFragment.CASE, R.drawable.icn_4);
+        SlideMenuItem menuItem4 = new SlideMenuItem(GlobalConfig.CASE, R.drawable.icn_4);
         list.add(menuItem4);
-        SlideMenuItem menuItem5 = new SlideMenuItem(ContentFragment.SHOP, R.drawable.icn_5);
+        SlideMenuItem menuItem5 = new SlideMenuItem(GlobalConfig.SHOP, R.drawable.icn_5);
         list.add(menuItem5);
-        SlideMenuItem menuItem6 = new SlideMenuItem(ContentFragment.PARTY, R.drawable.icn_6);
+        SlideMenuItem menuItem6 = new SlideMenuItem(GlobalConfig.PARTY, R.drawable.icn_6);
         list.add(menuItem6);
-        SlideMenuItem menuItem7 = new SlideMenuItem(ContentFragment.MOVIE, R.drawable.icn_7);
+        SlideMenuItem menuItem7 = new SlideMenuItem(GlobalConfig.MOVIE, R.drawable.icn_7);
         list.add(menuItem7);
     }
 
@@ -153,33 +156,6 @@ public class MainActivity extends BaseActivity implements ViewAnimator.ViewAnima
         drawerLayout.setDrawerListener(drawerToggle);
     }
 
-    private void requestReadExternalPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                LogUtil.d(TAG, "READ permission IS NOT granted...");
-
-                if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    LogUtil.d(TAG, "11111111111111");
-                } else {
-                    // 0 是自己定义的请求coude
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
-                    LogUtil.d(TAG, "222222222222");
-                }
-            } else {
-                LogUtil.d(TAG, "READ permission is granted...");
-                mDataManager = StorageDataManager.getInstance(this);
-                mImageList = mDataManager.getImageList( );
-
-            }
-        } else {
-            LogUtil.d(TAG, "SDK Version is : " + Build.VERSION.SDK_INT);
-
-
-        }
-
-
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -235,8 +211,7 @@ public class MainActivity extends BaseActivity implements ViewAnimator.ViewAnima
         }
     }
 
-    private ScreenShotable replaceFragment(ScreenShotable screenShotable, int topPosition) {
-        LogUtil.d(TAG, "left position is: " + topPosition);
+    private ScreenShotable replaceFragment(Resourceble slideMenuItem, ScreenShotable screenShotable, int topPosition) {
         this.res = this.res == R.drawable.content_music ? R.drawable.content_films : R.drawable.content_music;
         View view = findViewById(R.id.content_frame);
         int finalRadius = Math.max(view.getWidth( ), view.getHeight( ));
@@ -246,18 +221,34 @@ public class MainActivity extends BaseActivity implements ViewAnimator.ViewAnima
 
         findViewById(R.id.content_overlay).setBackgroundDrawable(new BitmapDrawable(getResources( ), screenShotable.getBitmap( )));
         animator.start( );
-        ContentFragment contentFragment = ContentFragment.newInstance(this.res);
-        getSupportFragmentManager( ).beginTransaction( ).replace(R.id.content_frame, contentFragment).commit( );
-        return contentFragment;
+        // ContentFragment contentFragment = ContentFragment.newInstance(this.res);
+        switch (slideMenuItem.getName( )) {
+            case GlobalConfig.PHOTO:
+                PhotoFragment photoFragment = PhotoFragment.newInstance(this.res);
+                getSupportFragmentManager( ).beginTransaction( ).replace(R.id.content_frame, photoFragment).commit( );
+                return photoFragment;
+            case GlobalConfig.AUDIO:
+                AudioFragment audioFragment = AudioFragment.newInstance(this.res);
+                getSupportFragmentManager( ).beginTransaction( ).replace(R.id.content_frame, audioFragment).commit( );
+                return audioFragment;
+            case GlobalConfig.VIDEO:
+                VideoFragment videoFragment = VideoFragment.newInstance(this.res);
+                getSupportFragmentManager( ).beginTransaction( ).replace(R.id.content_frame, videoFragment).commit( );
+                return videoFragment;
+
+        }
+
+        return null;
     }
 
     @Override
     public ScreenShotable onSwitch(Resourceble slideMenuItem, ScreenShotable screenShotable, int position) {
+        LogUtil.d(TAG, "itemName:" + slideMenuItem.getName( ));
         switch (slideMenuItem.getName( )) {
-            case ContentFragment.CLOSE:
+            case GlobalConfig.CLOSE:
                 return screenShotable;
             default:
-                return replaceFragment(screenShotable, position);
+                return replaceFragment(slideMenuItem, screenShotable, position);
         }
     }
 
@@ -278,4 +269,5 @@ public class MainActivity extends BaseActivity implements ViewAnimator.ViewAnima
     public void addViewToContainer(View view) {
         linearLayout.addView(view);
     }
+
 }

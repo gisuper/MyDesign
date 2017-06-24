@@ -1,6 +1,9 @@
 package com.yangxiong.gisuper.mideaplayer;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -58,7 +61,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         });
-
+        requestReadExternalPermission();
     }
 
     private void initViewPager() {
@@ -94,5 +97,32 @@ public class WelcomeActivity extends AppCompatActivity {
         };
         mParallaxViewPager.setAdapter(adapter);
         mIndicator.setViewPager(mParallaxViewPager);
+    }
+
+    private void requestReadExternalPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                LogUtil.d(TAG, "READ permission IS NOT granted...");
+
+                if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    LogUtil.d(TAG, "11111111111111");
+                } else {
+                    // 0 是自己定义的请求coude
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+                    LogUtil.d(TAG, "222222222222");
+                }
+            } else {
+                LogUtil.d(TAG, "READ permission is granted...");
+
+
+            }
+        } else {
+            LogUtil.d(TAG, "SDK Version is : " + Build.VERSION.SDK_INT);
+
+
+        }
+
+
     }
 }

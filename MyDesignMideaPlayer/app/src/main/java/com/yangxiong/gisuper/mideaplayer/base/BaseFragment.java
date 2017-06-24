@@ -1,4 +1,4 @@
-package com.yangxiong.gisuper.mideaplayer;
+package com.yangxiong.gisuper.mideaplayer.base;
 
 
 import android.graphics.Bitmap;
@@ -6,10 +6,13 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+
+import com.yangxiong.gisuper.mideaplayer.MainActivity;
+import com.yangxiong.gisuper.mideaplayer.R;
 
 import yalantis.com.sidemenu.interfaces.ScreenShotable;
 
@@ -18,28 +21,20 @@ import yalantis.com.sidemenu.interfaces.ScreenShotable;
  */
 
 
-public class ContentFragment extends Fragment implements ScreenShotable {
+public abstract class  BaseFragment extends Fragment implements ScreenShotable {
 
-
-    private View containerView;
-    protected ImageView mImageView;
+    protected View containerView;
     protected int res;
-    private Bitmap bitmap;
-    private MainActivity mMainActivity;
+    protected Bitmap bitmap;
+    protected RecyclerView rvRecyclerView;
+    protected MainActivity mMainActivity;
 
-    public static ContentFragment newInstance(int resId) {
-        ContentFragment contentFragment = new ContentFragment( );
-        Bundle bundle = new Bundle( );
-        bundle.putInt(Integer.class.getName( ), resId);
-        contentFragment.setArguments(bundle);
-        return contentFragment;
-    }
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.containerView = view.findViewById(R.id.container);
+        this.containerView = view.findViewById(R.id.fl_framelayout);
     }
 
     @Override
@@ -51,13 +46,14 @@ public class ContentFragment extends Fragment implements ScreenShotable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        mImageView = (ImageView) rootView.findViewById(R.id.image_content);
-        mImageView.setClickable(true);
-        mImageView.setFocusable(true);
-        mImageView.setImageResource(res);
+        View rootView = inflater.inflate(R.layout.fragment_photo, container, false);
+        ////////////////////
+        setRecyclerView(rootView);
+        ////////////////////////
         return rootView;
     }
+
+    protected abstract void setRecyclerView(View rootView) ;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -65,6 +61,13 @@ public class ContentFragment extends Fragment implements ScreenShotable {
         mMainActivity = (MainActivity) getContext( );
     }
 
+    @Override
+    public void onStart() {
+        super.onStart( );
+        setAdapter( );
+    }
+
+    protected abstract void setAdapter();
 
     @Override
     public void takeScreenShot() {
@@ -75,7 +78,7 @@ public class ContentFragment extends Fragment implements ScreenShotable {
                         containerView.getHeight( ), Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bitmap);
                 containerView.draw(canvas);
-                ContentFragment.this.bitmap = bitmap;
+                BaseFragment.this.bitmap = bitmap;
             }
         };
 

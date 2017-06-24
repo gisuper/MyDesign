@@ -1,4 +1,4 @@
-package com.yangxiong.gisuper.mideaplayer.global;
+package com.yangxiong.gisuper.mideaplayer.base;
 
 import android.os.Bundle;
 import android.os.PersistableBundle;

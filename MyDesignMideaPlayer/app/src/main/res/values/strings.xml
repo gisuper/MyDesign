@@ -8,4 +8,8 @@
     <string name="action_settings">Settings</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+
+    <string name="title_activity_photo_show">PhotoShowActivity</string>
+
+    <string name="title_activity_video_show">VideoShowActivity</string>
 </resources>
